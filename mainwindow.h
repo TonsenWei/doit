@@ -12,7 +12,9 @@ public:
     ~MainWindow();
 
 private:
+    void initWindow();
     void createActions();
     void createStatusBar();
+    void createContents();
 };
 #endif // MAINWINDOW_H
