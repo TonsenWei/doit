@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QFileInfo>
 
 class MainWindow : public QMainWindow
 {
@@ -15,6 +16,10 @@ private:
     void initWindow();
     void createActions();
     void createStatusBar();
-    void createContents();
+    void createMainContents();
+    void createQDockWidgets();
+    
+    void createQTabWidget();
 };
+
 #endif // MAINWINDOW_H

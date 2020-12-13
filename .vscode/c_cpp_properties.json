@@ -3,14 +3,29 @@
         {
             "name": "Linux",
             "includePath": [
-                "${workspaceFolder}/**"
+                "${workspaceFolder}/**",
+                "/opt/Qt5.14.0/5.14.0/gcc_64/include",
+                "/opt/Qt5.14.0/5.14.0/gcc_64/include/QtCore",
+                "/opt/Qt5.14.0/5.14.0/gcc_64/include/QtGui",
+                "/opt/Qt5.14.0/5.14.0/gcc_64/include/QtWidgets",
+                "${workspaceRoot}"
             ],
+            "browse": {
+                "path": [
+                    "${workspaceFolder}/**",
+                    "/opt/Qt5.14.0/5.14.0/gcc_64/include",
+                    "/opt/Qt5.14.0/5.14.0/gcc_64/include/QtCore",
+                    "/opt/Qt5.14.0/5.14.0/gcc_64/include/QtGui",
+                    "/opt/Qt5.14.0/5.14.0/gcc_64/include/QtWidgets",
+                    "${workspaceRoot}"
+                ]
+            },
             "defines": [],
             "compilerPath": "/usr/bin/gcc",
             "cStandard": "gnu11",
-            "cppStandard": "c++17",
+            "cppStandard": "c++11",
             "intelliSenseMode": "gcc-x64",
-            "compileCommands": "${workspaceFolder}/build/compile_commands.json"
+            // "compileCommands": "${workspaceFolder}/build/compile_commands.json"
         }
     ],
     "version": 4
