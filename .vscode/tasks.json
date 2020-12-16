@@ -5,22 +5,42 @@
     },
     "tasks": [
         {   // cmake ..
+            // "command": "cmake",// 电脑上已安装微软MSVC编译器，会默认使用MSVC编译，
+            // 使用cmake -G "MinGW Makefiles" ..代替cmake .., 仅第一次时需要代替
             "type": "shell",
             "label": "cmake",
-            "command": "cmake",
+            // "command": "cmake ..",
+            "command": "cmake -G \"MinGW Makefiles\"",
             "args": [
                 ".."
             ]
         },
         {   // make
+            // mingw32-make
             "label": "make",
             "group": {
                 "kind": "build",
                 "isDefault": true
             },
-            "command": "make",
+            // "command": "make",
+            "command": "mingw32-make",
             "args": [
 
+            ]
+        },
+        {  
+            "type": "shell",
+            "label": "windeployqt",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "command": "cmd",
+            // "command": "make",
+            // "command": "D:/tools/Qt/Qt5.12.9/5.12.9/mingw73_64/bin/windeployqt.exe doit.exe",
+            "args": [
+                "/c",
+                "D:/tools/Qt/Qt5.12.9/5.12.9/mingw73_64/bin/windeployqt.exe --release doit.exe",
             ]
         },
         {   //依次执行cmake .. 和make任务
@@ -29,6 +49,7 @@
             "dependsOn":[
                 "cmake",
                 "make"
+                // "windeployqt"
             ]
         }
     ]

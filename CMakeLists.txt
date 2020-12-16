@@ -2,8 +2,13 @@ cmake_minimum_required(VERSION 3.5)
 
 project(doit VERSION 1.0.0 LANGUAGES CXX)
 
+SET(CMAKE_PREFIX_PATH D:/tools/Qt/Qt5.12.9/5.12.9/mingw73_64/lib/cmake)
+
+# SET(CMAKE_BUILD_TYPE "Debug")
+SET(CMAKE_BUILD_TYPE "Release")
+# SET(CMAKE_PREFIX_PATH D:/tools/Qt/Qt5.12.9/5.12.9/msvc2017_64/lib/cmake)
 # -g参数会生成调试信息，比如在main中增加了断点，使用-g时会在编译时加入这个断点信息
-set(CMAKE_CXX_FLAGS "-g")
+# set(CMAKE_CXX_FLAGS "-g")
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
@@ -27,7 +32,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 #    endif()
 #endif()
 
-find_package(Qt5 COMPONENTS Widgets REQUIRED)
+find_package(Qt5 COMPONENTS Widgets Core Gui REQUIRED)
 
 if(ANDROID)
   add_library(doit SHARED
@@ -37,7 +42,7 @@ if(ANDROID)
     resources.qrc
   )
 else()
-  add_executable(doit
+  add_executable(doit WIN32
     main.cpp
     mainwindow.cpp
     mainwindow.h
@@ -45,4 +50,4 @@ else()
   )
 endif()
 
-target_link_libraries(doit PRIVATE Qt5::Widgets)
+target_link_libraries(doit PRIVATE Qt5::Widgets Qt5::Core Qt5::Gui)
