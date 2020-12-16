@@ -127,7 +127,16 @@
                 "CmakeMakeRelease",
                 "windeployqt_Release"
             ]
-        }
+        },
+        {   //依次执行dependsOn中列出来的任务,这个用于已经执行windeployqt拷贝了dll文件的情况下快速启动程序查看结果的
+            //前提是之前拷贝的是release版本的dll
+            "label": "BuildTemp",
+			"dependsOrder": "sequence", // 按列出的顺序执行任务依赖项
+            "dependsOn":[
+                "cmakeRelease",
+                "CmakeMakeRelease",
+            ]
+        },
     ]
 
 }

@@ -5,7 +5,6 @@
             "name": "mingw73_64",
             "intelliSenseMode": "gcc-x64",
             "includePath": [
-                // "C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/include",
                 "D:/software/qt5/5.12.9/mingw73_64/include",
                 "D:/software/qt5/5.12.9/mingw73_64/include/Qt3DAnimation",
                 "D:/software/qt5/5.12.9/mingw73_64/include/Qt3DCore",
@@ -80,14 +79,10 @@
                 "D:/software/qt5/5.12.9/mingw73_64/include/QtWinExtras",
                 "D:/software/qt5/5.12.9/mingw73_64/include/QtXml",
                 "D:/software/qt5/5.12.9/mingw73_64/include/QtXmlPatterns",
-                // "C:/Program Files (x86)/Windows Kits/10/Include/10.0.19041.0/shared",
-                // "C:/Program Files (x86)/Windows Kits/10/Include/10.0.19041.0/ucrt",
-                // "C:/Program Files (x86)/Windows Kits/10/Include/10.0.19041.0/um",
                 "${workspaceRoot}"
             ],
             "browse": {
                 "path": [
-                    // "C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/include",
                     "D:/software/qt5/5.12.9/mingw73_64/include",
                     "D:/software/qt5/5.12.9/mingw73_64/include/Qt3DAnimation",
                     "D:/software/qt5/5.12.9/mingw73_64/include/Qt3DCore",
@@ -157,16 +152,11 @@
                     "D:/software/qt5/5.12.9/mingw73_64/include/QtVulkanSupport",
                     "D:/software/qt5/5.12.9/mingw73_64/include/QtWebChannel",
                     "D:/software/qt5/5.12.9/mingw73_64/include/QtWebSockets",
-                    // "D:/software/qt5/5.12.9/mingw73_64/include/QtWebView",
                     "D:/software/qt5/5.12.9/mingw73_64/include/QtWidgets",
                     "D:/software/qt5/5.12.9/mingw73_64/include/QtWindowsUIAutomationSupport",
                     "D:/software/qt5/5.12.9/mingw73_64/include/QtWinExtras",
                     "D:/software/qt5/5.12.9/mingw73_64/include/QtXml",
                     "D:/software/qt5/5.12.9/mingw73_64/include/QtXmlPatterns",
-                    // "D:/software/qt5/5.12.9/mingw73_64/include/QtZlib",
-                    // "C:/Program Files (x86)/Windows Kits/10/Include/10.0.19041.0/shared",
-                    // "C:/Program Files (x86)/Windows Kits/10/Include/10.0.19041.0/ucrt",
-                    // "C:/Program Files (x86)/Windows Kits/10/Include/10.0.19041.0/um",
                     "${workspaceRoot}"
                 ]
             },
