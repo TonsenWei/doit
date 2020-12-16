@@ -2,13 +2,14 @@ cmake_minimum_required(VERSION 3.5)
 
 project(doit VERSION 1.0.0 LANGUAGES CXX)
 
-SET(CMAKE_PREFIX_PATH D:/tools/Qt/Qt5.12.9/5.12.9/mingw73_64/lib/cmake)
+SET(CMAKE_PREFIX_PATH D:/software/qt5/5.12.9/mingw73_64/lib/cmake)
+# SET(CMAKE_C_COMPILER "D:/software/qt5/Tools/mingw730_64/bin/gcc.exe")
+# SET(CMAKE_CXX_COMPILER "D:/software/qt5/Tools/mingw730_64/bin/g++.exe")
 
-# SET(CMAKE_BUILD_TYPE "Debug")
-SET(CMAKE_BUILD_TYPE "Release")
-# SET(CMAKE_PREFIX_PATH D:/tools/Qt/Qt5.12.9/5.12.9/msvc2017_64/lib/cmake)
+# SET(CMAKE_BUILD_TYPE Debug CACHE STRING "set build type to debug")
+# SET(CMAKE_BUILD_TYPE "Release")
 # -g参数会生成调试信息，比如在main中增加了断点，使用-g时会在编译时加入这个断点信息
-# set(CMAKE_CXX_FLAGS "-g")
+set(CMAKE_CXX_FLAGS "-g")
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 

@@ -4,31 +4,84 @@
         "cwd": "${workspaceFolder}/build" //进入build目录
     },
     "tasks": [
-        {   // cmake ..
-            // "command": "cmake",// 电脑上已安装微软MSVC编译器，会默认使用MSVC编译，
-            // 使用cmake -G "MinGW Makefiles" ..代替cmake .., 仅第一次时需要代替
+        {//一大堆参数，构建, 相当于执行了make，生成exe，带调试信息(Debug)
             "type": "shell",
-            "label": "cmake",
-            // "command": "cmake ..",
-            "command": "cmake -G \"MinGW Makefiles\"",
-            "args": [
-                ".."
+            "label": "CmakeMakeDebug",
+            "command": "cmd",
+            // "command": "cmake -G \"MinGW Makefiles\"",
+            "args": [//make构建
+                "/c",
+                "D:/software/cmake-3.17.3-win64-x64/bin/cmake.EXE",
+                "--build",
+                "${workspaceFolder}/build",
+                "--config",
+                "Debug",
+                "--target",
+                "all",
+                "--",
+                "-j",
+                "18"
+            ]
+        },{////一大堆参数，构建, 相当于执行了make，生成exe，不带调试信息(Release)
+            "type": "shell",
+            "label": "CmakeMakeRelease",
+            "command": "cmd",
+            // "command": "cmake -G \"MinGW Makefiles\"",
+            "args": [//make构建
+                "/c",
+                "D:/software/cmake-3.17.3-win64-x64/bin/cmake.EXE",
+                "--build",
+                "${workspaceFolder}/build",
+                "--config",
+                "Release",
+                "--target",
+                "all",
+                "--",
+                "-j",
+                "18"
             ]
         },
-        {   // make
-            // mingw32-make
-            "label": "make",
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            },
-            // "command": "make",
-            "command": "mingw32-make",
+        {   //cmake生成makefile,相当于执行cmake ..  , 带调试信息(Debug)
+            "type": "shell",
+            "label": "cmakeDebug",
+            "command": "cmd",
             "args": [
-
+                "/c",
+                "D:/software/cmake-3.17.3-win64-x64/bin/cmake.EXE",//cmake程序路径
+                "----no-warn-unused-cli",
+                "-DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE",
+                "-DCMAKE_BUILD_TYPE:STRING=Debug",//生成debug程序，包含调试信息
+                "-DCMAKE_C_COMPILER:FILEPATH=D:/software/qt5/Tools/mingw730_64/bin/gcc.exe",//gcc路径
+                "-DCMAKE_CXX_COMPILER:FILEPATH=D:/software/qt5/Tools/mingw730_64/bin/g++.exe",//g++路径
+                "-H${workspaceFolder}",//工程路径
+                "-B${workspaceFolder}/build",//输出产物路径
+                "-G",
+                "\"MinGW Makefiles\""   // -G "MinGW Makefiles" 是生成MinGW的Makefile文件
             ]
         },
-        {  
+        {   //cmake生成makefile,相当于执行cmake ..  , 不带调试信息(Release)
+            "type": "shell",
+            "label": "cmakeRelease",
+            "command": "cmd",
+            "args": [
+                "/c",
+                "D:/software/cmake-3.17.3-win64-x64/bin/cmake.EXE",//cmake程序路径
+                "----no-warn-unused-cli",
+                "-DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE",
+                "-DCMAKE_BUILD_TYPE:STRING=Release",//生成debug程序，包含调试信息
+                "-DCMAKE_C_COMPILER:FILEPATH=D:/software/qt5/Tools/mingw730_64/bin/gcc.exe",//gcc路径
+                "-DCMAKE_CXX_COMPILER:FILEPATH=D:/software/qt5/Tools/mingw730_64/bin/g++.exe",//g++路径
+                "-H${workspaceFolder}",//工程路径
+                "-B${workspaceFolder}/build",//输出产物路径
+                "-G",
+                "\"MinGW Makefiles\""   // -G "MinGW Makefiles" 是生成MinGW的Makefile文件
+            ]
+        },
+        {   //把exe依赖的qt5的dll库拷贝到exe所在目录，但是现在默认会拷贝环境变量下的dll，
+            //而不是指定的D:/software/qt5/5.12.9/mingw73_64/bin下的路径
+            //原因是环境变量没有设置为D:/software/qt5/5.12.9/mingw73_64/bin，而是设置为了
+            //D:/software/qt5/5.12.9/MSVC2017/bin,修改环境变量为mingw73的路径后重启电脑即可
+            //默认是复制debug的dll,增加--release则表示复制release的dll,文件会比较小
             "type": "shell",
             "label": "windeployqt",
             "group": {
@@ -36,20 +89,43 @@
                 "isDefault": true
             },
             "command": "cmd",
-            // "command": "make",
-            // "command": "D:/tools/Qt/Qt5.12.9/5.12.9/mingw73_64/bin/windeployqt.exe doit.exe",
             "args": [
                 "/c",
-                "D:/tools/Qt/Qt5.12.9/5.12.9/mingw73_64/bin/windeployqt.exe --release doit.exe",
+                "D:/software/qt5/5.12.9/mingw73_64/bin/windeployqt.exe",
+                "${workspaceFolder}/build/doit.exe"
             ]
         },
-        {   //依次执行cmake .. 和make任务
-            "label": "Build",
+        {   
+            "type": "shell",
+            "label": "windeployqt_Release",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "command": "cmd",
+            "args": [
+                "/c",
+                "D:/software/qt5/5.12.9/mingw73_64/bin/windeployqt.exe",
+                "--release",  // release版本的dll会精简，文件会小非常多，所以软件发布的时候要选择release发布打包
+                "${workspaceFolder}/build/doit.exe"
+            ]
+        },
+        {   //依次执行dependsOn中列出来的任务
+            "label": "BuildDebug",
 			"dependsOrder": "sequence", // 按列出的顺序执行任务依赖项
             "dependsOn":[
-                "cmake",
-                "make"
-                // "windeployqt"
+                "cmakeDebug",
+                "CmakeMakeDebug",
+                "windeployqt"
+            ]
+        },
+        {   //依次执行dependsOn中列出来的任务
+            "label": "BuildRelease",
+			"dependsOrder": "sequence", // 按列出的顺序执行任务依赖项
+            "dependsOn":[
+                "cmakeRelease",
+                "CmakeMakeRelease",
+                "windeployqt_Release"
             ]
         }
     ]
