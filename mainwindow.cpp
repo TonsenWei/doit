@@ -9,44 +9,112 @@
 #include <QList>
 #include <QRect>
 #include <QLabel>
+#include <QSplitter>
+#include <QTabWidget>
+#include <QLineEdit>
+#include <QVBoxLayout>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
     //设置主窗口的标题栏文字,如果不设置，默认使用工程名doit当窗口名
-    setWindowTitle(tr("DockWindowsTest"));
-    createActions();
-    createStatusBar();
+    setWindowTitle(tr("Doit by Tonsen"));
+    initWindow();       // 初始化窗口位置和大小
+    createActions();    // 初始化菜单栏
+    createStatusBar();  // 初始化状态栏
+    // createMainContents();   // 初始化主窗口内容
+    // createQDockWidgets();   // QDock窗口
+    createQTabWidget();
+}
 
+/**
+ * 析构函数
+*/
+MainWindow::~MainWindow()
+{
+}
+
+/**
+ * 初始化程序主窗口的位置和大小
+ * 位置根据显示器大小和窗口大小计算放在屏幕正中间
+*/
+void MainWindow::initWindow()
+{
     // 窗口位置和大小
-    int winWidth = 800;
-    int winHeight = 600;
+    int winWidth = 1024;
+    int winHeight = 768;
     resize(winWidth, winHeight);
     QList<QScreen *> list_screen = QGuiApplication::screens(); //多显示器
     QRect rect = list_screen.at(0)->geometry();
     int desktop_width = rect.width();
     int desktop_height = rect.height();
     move(desktop_width / 2 - winWidth / 2, desktop_height / 2 - winHeight / 2);
+}
 
-    QTextEdit *te = new QTextEdit(this); //定义一个QTextEdit对象作为主窗口
-    te->setText(tr("Main Window"));      //窗口内显示文字
-    // 主要将是消除布局中的空隙，让两个控件紧紧挨在一起
-    te->setAlignment(Qt::AlignCenter);
-    setCentralWidget(te); //将此编辑框作为主窗体的中央窗体
+/**
+ * 创建主要内容窗口
+*/
+void MainWindow::createMainContents() 
+{
+   // QSplitter使用
+    QSplitter *splitterMain;
+    QTextEdit *textleft;
+    QSplitter *splitterRight;
+    QTextEdit *textUp;
+    QTextEdit *textBottom;
+    splitterMain=new QSplitter(Qt::Horizontal,this);  //Horizontal:水平的
+    textleft=new QTextEdit(QObject::tr("Left Widget"),splitterMain);
+    textleft->setAlignment(Qt::AlignCenter);
+    //右部分分割窗口
+    splitterRight=new QSplitter(Qt::Vertical,splitterMain);//Vertical：垂直的
+    splitterRight->setOpaqueResize(false); //Opaque：不透明的
+    textUp =new QTextEdit(QObject::tr("Top Widget"),splitterRight);
+    textUp->setAlignment(Qt::AlignCenter);
+    textBottom=new QTextEdit(QObject::tr("Bottom Widget"),splitterRight);
+    textBottom->setAlignment(Qt::AlignCenter);
+    // splitterMain->setStretchFactor(0,1); //Stretch Factor:拉伸系数
+    // splitterMain->setWindowTitle(QObject::tr("Splitter"));
+    // splitterMain->show();
+    setCentralWidget(splitterMain); 
 
+    // QTextEdit
+    // QTextEdit *te = new QTextEdit(this); // 定义一个QTextEdit对象作为主窗口
+    // te->setText(tr("Main Window"));      // 窗口内显示文字
+    // te->setAlignment(Qt::AlignCenter);   // 主要将是消除布局中的空隙，让两个控件紧紧挨在一起
+    // setCentralWidget(te);                // 将此编辑框作为主窗体的中央窗体
+
+}
+
+void MainWindow::createQTabWidget()
+{
+    QTabWidget *tabWidget = new QTabWidget(this);
+    QFileInfo fileInfo(".");
+    QLabel *fileNameLabel = new QLabel(tr("File Name:"));
+    tabWidget->addTab(fileNameLabel, tr("General"));
+    // tabWidget->addTab(new PermissionsTab(fileInfo), tr("Permissions"));
+    // tabWidget->addTab(new ApplicationsTab(fileInfo), tr("Applications"));
+    setCentralWidget(tabWidget); 
+    // QVBoxLayout *mainLayout = new QVBoxLayout;
+    // mainLayout->addWidget(tabWidget);
+    // this->setLayout(mainLayout);
+}
+
+/**
+ * 创建停靠窗口
+*/
+void MainWindow::createQDockWidgets()
+{
     // 停靠窗口1
     QDockWidget *dock1 = new QDockWidget(tr("DockWindow1"), this);
     QDockWidget *dock2 = new QDockWidget(tr("DockWindow2"), this);
     QDockWidget *dock3 = new QDockWidget(tr("DockWindow3"), this);
-
-    // 可移动
-    dock1->setFeatures(QDockWidget::DockWidgetMovable);
+    
+    dock1->setFeatures(QDockWidget::DockWidgetMovable);  // 可移动
     dock1->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
     dock1->setStyleSheet("border:none");  // 无边框
 
     QTextEdit *te1 = new QTextEdit();
-    te1->setText(tr("Window1,The dock widget can be moved between dicks by user"
-                    ""));
+    te1->setText(tr("Window1,The dock widget can be moved between dicks by user"));
     dock1->setWidget(te1);                         // 停靠窗口1内的Text控件
     te1->setAlignment(Qt::AlignCenter);            // 主要将是消除布局中的空隙，让两个控件紧紧挨在一起
     addDockWidget(Qt::RightDockWidgetArea, dock1); // dock1添加到主窗口
@@ -56,8 +124,8 @@ MainWindow::MainWindow(QWidget *parent)
     QTextEdit *te2 = new QTextEdit();
     te2->setText(tr("Window2,The dock widget can be detached from the main window, and floated as an independent window,and can be closed"));
     dock2->setWidget(te2);
-    te2->setAlignment(Qt::AlignCenter); // 主要将是消除布局中的空隙，让两个控件紧紧挨在一起
-    dock2->setStyleSheet("border:none");  // 无边框
+    te2->setAlignment(Qt::AlignCenter);     // 主要将是消除布局中的空隙，让两个控件紧紧挨在一起
+    dock2->setStyleSheet("border:none");    // 无边框
     addDockWidget(Qt::RightDockWidgetArea, dock2);
 
     //停靠窗口3
@@ -66,13 +134,9 @@ MainWindow::MainWindow(QWidget *parent)
     QTextEdit *te3 = new QTextEdit();
     te3->setText(tr("Window3,The dock widget can be closed,moved,add floated"));
     dock3->setWidget(te3);
-    te3->setAlignment(Qt::AlignCenter); // 主要将是消除布局中的空隙，让两个控件紧紧挨在一起
-    dock3->setStyleSheet("border:none");  // 无边框
+    te3->setAlignment(Qt::AlignCenter);     // 主要将是消除布局中的空隙，让两个控件紧紧挨在一起
+    dock3->setStyleSheet("border:none");    // 无边框
     addDockWidget(Qt::RightDockWidgetArea, dock3);
-}
-
-MainWindow::~MainWindow()
-{
 }
 
 /**
@@ -80,12 +144,24 @@ MainWindow::~MainWindow()
  * */ 
 void MainWindow::createActions()
 {
-    QMenu *fileMenu = menuBar()->addMenu(tr("&File"));
+    QMenu *fileMenu = menuBar()->addMenu(tr("文件"));
     // QToolBar *fileToolBar = addToolBar(tr("File"));
     fileMenu->addAction(tr("菜单项1"));
     fileMenu->addAction(tr("菜单项2"));
+
+    // const QIcon newIcon = QIcon::fromTheme("document-new", QIcon(":/images/new.png"));
+    // QAction *newLetterAct = new QAction(newIcon, tr("&New Letter"), this);//增加图标
+    QAction *exitAct = new QAction(tr("退出"), this);
+    // exitAct->setShortcuts(QKeySequence::New);//绑定快捷键
+    exitAct->setStatusTip(tr("退出主程序"));
+    //信号和槽连接
+    connect(exitAct, &QAction::triggered, this, &MainWindow::close);//退出
+    fileMenu->addAction(exitAct);
 }
 
+/**
+ * 状态栏
+ * */ 
 void MainWindow::createStatusBar()
 {
     QLabel *locationLabel;
