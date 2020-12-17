@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.5)
 
 project(doit VERSION 1.0.0 LANGUAGES CXX)
 
-SET(CMAKE_PREFIX_PATH D:/software/qt5/5.12.9/mingw73_64/lib/cmake)
+# SET(CMAKE_PREFIX_PATH D:/software/qt5/5.12.9/mingw73_64/lib/cmake)
 # SET(CMAKE_C_COMPILER "D:/software/qt5/Tools/mingw730_64/bin/gcc.exe")
 # SET(CMAKE_CXX_COMPILER "D:/software/qt5/Tools/mingw730_64/bin/g++.exe")
 
