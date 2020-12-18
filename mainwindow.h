@@ -14,12 +14,16 @@ public:
 
 private:
     void initWindow();
-    void createActions();
+    void createMenuBar();
     void createStatusBar();
+    void createToolBar();
+
     void createMainContents();
     void createQDockWidgets();
-    
     void createQTabWidget();
+    
+    const QIcon newIcon = QIcon::fromTheme("document-new", QIcon(":/images/new.png"));
+    const QIcon saveIcon = QIcon::fromTheme("document-save", QIcon(":/images/save.png"));
 };
 
 #endif // MAINWINDOW_H

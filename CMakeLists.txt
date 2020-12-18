@@ -48,6 +48,8 @@ else()
     mainwindow.cpp
     mainwindow.h
     resources.qrc
+    myserialwidget.cpp
+    myserialwidget.h
   )
 endif()
 

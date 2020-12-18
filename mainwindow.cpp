@@ -13,6 +13,10 @@
 #include <QTabWidget>
 #include <QLineEdit>
 #include <QVBoxLayout>
+#include <QIcon>
+#include <QToolBar>
+
+#include "myserialwidget.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -20,7 +24,8 @@ MainWindow::MainWindow(QWidget *parent)
     //设置主窗口的标题栏文字,如果不设置，默认使用工程名doit当窗口名
     setWindowTitle(tr("Doit by Tonsen"));
     initWindow();       // 初始化窗口位置和大小
-    createActions();    // 初始化菜单栏
+    createMenuBar();    // 初始化菜单栏
+    createToolBar();
     createStatusBar();  // 初始化状态栏
     // createMainContents();   // 初始化主窗口内容
     // createQDockWidgets();   // QDock窗口
@@ -88,12 +93,17 @@ void MainWindow::createMainContents()
 void MainWindow::createQTabWidget()
 {
     QTabWidget *tabWidget = new QTabWidget(this);
-    QFileInfo fileInfo(".");
+
+    MySerialWidget *myserialwidget = new MySerialWidget(this);
     QLabel *fileNameLabel = new QLabel(tr("File Name:"));
-    tabWidget->addTab(fileNameLabel, tr("General"));
+    tabWidget->addTab(myserialwidget, tr("General"));
+    tabWidget->addTab(fileNameLabel, tr("test1"));
     // tabWidget->addTab(new PermissionsTab(fileInfo), tr("Permissions"));
     // tabWidget->addTab(new ApplicationsTab(fileInfo), tr("Applications"));
     setCentralWidget(tabWidget); 
+    
+    tabWidget->setTabIcon(0, newIcon);//要先addTab之后才能setIcon
+    tabWidget->setTabsClosable(true); // 设置为可关闭
     // QVBoxLayout *mainLayout = new QVBoxLayout;
     // mainLayout->addWidget(tabWidget);
     // this->setLayout(mainLayout);
@@ -142,21 +152,59 @@ void MainWindow::createQDockWidgets()
 /**
  * 创建菜单栏和工具栏
  * */ 
-void MainWindow::createActions()
+void MainWindow::createMenuBar()
 {
-    QMenu *fileMenu = menuBar()->addMenu(tr("文件"));
-    // QToolBar *fileToolBar = addToolBar(tr("File"));
-    fileMenu->addAction(tr("菜单项1"));
-    fileMenu->addAction(tr("菜单项2"));
-
+    QMenuBar *menuBar = new QMenuBar(this);
+    // 将菜单栏添加到主窗口
+    this->setMenuBar(menuBar);
+    QMenu *fileMenu = menuBar->addMenu(tr("文件"));
+    // 定义菜单项
+    QAction *newItem = new QAction(tr("新建"), this);
+    QAction *saveItem = new QAction(tr("保存"), this);
     // const QIcon newIcon = QIcon::fromTheme("document-new", QIcon(":/images/new.png"));
     // QAction *newLetterAct = new QAction(newIcon, tr("&New Letter"), this);//增加图标
+    newItem->setIcon(newIcon);
+    // const QIcon saveIcon = QIcon::fromTheme("document-save", QIcon(":/images/save.png"));
+    saveItem->setIcon(saveIcon);
+
+    //将菜单项加入菜单
+    fileMenu->addAction(newItem);
+    fileMenu->addAction(saveItem);
+
+    //设置快捷键
+    newItem->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_N));
+    //插入一个华丽的分割线
+    fileMenu->addSeparator();
+
     QAction *exitAct = new QAction(tr("退出"), this);
-    // exitAct->setShortcuts(QKeySequence::New);//绑定快捷键
-    exitAct->setStatusTip(tr("退出主程序"));
+    exitAct->setStatusTip(tr("退出主程序"));  // 鼠标移到退出选项时会在状态栏提示
     //信号和槽连接
     connect(exitAct, &QAction::triggered, this, &MainWindow::close);//退出
     fileMenu->addAction(exitAct);
+
+    
+    QMenu *editMenu = menuBar->addMenu(tr("编辑"));
+    editMenu->addAction(tr("开始编辑"));
+}
+
+void MainWindow::createToolBar(){
+    QToolBar *toolBar = new QToolBar(this);
+    this->addToolBar(toolBar);//可以拖动到上面，左边右边或悬浮
+
+    // 将菜单项放到工具栏中
+    QAction *newItem = new QAction(tr("新建"), this);
+    QAction *saveItem = new QAction(tr("保存"), this);
+    // const QIcon newIcon = QIcon::fromTheme("document-new", QIcon(":/images/new.png"));
+    // QAction *newLetterAct = new QAction(newIcon, tr("&New Letter"), this);//增加图标
+    newItem->setIcon(newIcon);
+    saveItem->setIcon(saveIcon);
+    toolBar->addAction(newItem);
+    toolBar->addSeparator();
+    toolBar->addAction(saveItem);
+    // 设置不允许浮动
+    toolBar->setFloatable(false);
+    // 设置工具栏允许的位置
+    toolBar->setAllowedAreas(Qt::LeftToolBarArea | Qt::RightToolBarArea | Qt::TopToolBarArea);
 }
 
 /**
