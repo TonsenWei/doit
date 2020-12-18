@@ -24,7 +24,7 @@
                 }
             ],
             "preLaunchTask": "BuildTemp",
-            "visualizerFile": "c:\\Users\\Administrator\\AppData\\Roaming\\Code\\User\\workspaceStorage\\aa4a884d27d87ae2d3d4529b5d718901\\tonka3000.qtvsctools\\qt.natvis.xml"
+            "visualizerFile": "c:\\Users\\Administrator\\AppData\\Roaming\\Code\\User\\workspaceStorage\\c7be90c6d06083e6e0de2680aed9cfca\\tonka3000.qtvsctools\\qt.natvis.xml"
         },
         {
             "name": "(gdb) Release",
@@ -46,7 +46,7 @@
                 }
             ],
             "preLaunchTask": "BuildRelease",
-            "visualizerFile": "c:\\Users\\Administrator\\AppData\\Roaming\\Code\\User\\workspaceStorage\\aa4a884d27d87ae2d3d4529b5d718901\\tonka3000.qtvsctools\\qt.natvis.xml"
+            "visualizerFile": "c:\\Users\\Administrator\\AppData\\Roaming\\Code\\User\\workspaceStorage\\c7be90c6d06083e6e0de2680aed9cfca\\tonka3000.qtvsctools\\qt.natvis.xml"
         },
         {
             "name": "(gdb) debug",
@@ -68,7 +68,7 @@
                 }
             ],
             "preLaunchTask": "BuildDebug",
-            "visualizerFile": "c:\\Users\\Administrator\\AppData\\Roaming\\Code\\User\\workspaceStorage\\aa4a884d27d87ae2d3d4529b5d718901\\tonka3000.qtvsctools\\qt.natvis.xml"
+            "visualizerFile": "c:\\Users\\Administrator\\AppData\\Roaming\\Code\\User\\workspaceStorage\\c7be90c6d06083e6e0de2680aed9cfca\\tonka3000.qtvsctools\\qt.natvis.xml"
         }
     ]
 }

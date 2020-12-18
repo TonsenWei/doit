@@ -7,6 +7,9 @@
 
 ## 最近更新
 
+    V1.1.2 
+        1、QHBoxLayout（布局），QSplitter(分割窗)使用
+
     V1.1.1 
         1、同步时忽略.vscode文件夹。
 		2、发现使用windeployqt打包的dll仍可以精简，需要自己尝试。
