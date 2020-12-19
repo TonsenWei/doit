@@ -7,6 +7,9 @@
 
 ## 最近更新
 
+    V1.1.3 
+        1、QtCharts(图表)使用，绘制折线图
+
     V1.1.2 
         1、QHBoxLayout（布局），QSplitter(分割窗)使用
 

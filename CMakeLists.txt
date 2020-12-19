@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.5)
 project(doit VERSION 1.0.0 LANGUAGES CXX)
 
 # SET(CMAKE_PREFIX_PATH D:/software/qt5/5.12.9/mingw73_64/lib/cmake)
+
 # SET(CMAKE_C_COMPILER "D:/software/qt5/Tools/mingw730_64/bin/gcc.exe")
 # SET(CMAKE_CXX_COMPILER "D:/software/qt5/Tools/mingw730_64/bin/g++.exe")
 
@@ -33,7 +34,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 #    endif()
 #endif()
 
-find_package(Qt5 COMPONENTS Widgets Core Gui REQUIRED)
+find_package(Qt5 COMPONENTS Widgets Core Gui Charts REQUIRED)
+
 
 if(ANDROID)
   add_library(doit SHARED
@@ -41,6 +43,10 @@ if(ANDROID)
     mainwindow.cpp
     mainwindow.h
     resources.qrc
+    myserialwidget.cpp
+    myserialwidget.h
+    mychart.h
+    mychart.cpp
   )
 else()
   add_executable(doit WIN32
@@ -50,7 +56,9 @@ else()
     resources.qrc
     myserialwidget.cpp
     myserialwidget.h
+    mychart.h
+    mychart.cpp
   )
 endif()
 
-target_link_libraries(doit PRIVATE Qt5::Widgets Qt5::Core Qt5::Gui)
+target_link_libraries(doit PRIVATE Qt5::Widgets Qt5::Core Qt5::Gui Qt5::Charts)

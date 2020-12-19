@@ -17,6 +17,7 @@
 #include <QToolBar>
 
 #include "myserialwidget.h"
+#include "mychart.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -94,8 +95,13 @@ void MainWindow::createQTabWidget()
 {
     QTabWidget *tabWidget = new QTabWidget(this);
 
+
+    MyChartWidget *myChartWidget = new MyChartWidget(this);
+
+
     MySerialWidget *myserialwidget = new MySerialWidget(this);
     QLabel *fileNameLabel = new QLabel(tr("File Name:"));
+    tabWidget->addTab(myChartWidget, tr("chart"));
     tabWidget->addTab(myserialwidget, tr("General"));
     tabWidget->addTab(fileNameLabel, tr("test1"));
     // tabWidget->addTab(new PermissionsTab(fileInfo), tr("Permissions"));
