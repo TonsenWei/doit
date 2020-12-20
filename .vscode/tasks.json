@@ -11,7 +11,7 @@
             // "command": "cmake -G \"MinGW Makefiles\"",
             "args": [//make构建
                 "/c",
-                "D:/software/cmake-3.17.3-win64-x64/bin/cmake.EXE",
+                "D:/tools/cmake-3.17.3-win64-x64/bin/cmake.EXE",
                 "--build",
                 "${workspaceFolder}/build",
                 "--config",
@@ -29,7 +29,7 @@
             // "command": "cmake -G \"MinGW Makefiles\"",
             "args": [//make构建
                 "/c",
-                "D:/software/cmake-3.17.3-win64-x64/bin/cmake.EXE",
+                "D:/tools/cmake-3.17.3-win64-x64/bin/cmake.EXE",
                 "--build",
                 "${workspaceFolder}/build",
                 "--config",
@@ -47,12 +47,12 @@
             "command": "cmd",
             "args": [
                 "/c",
-                "D:/software/cmake-3.17.3-win64-x64/bin/cmake.EXE",//cmake程序路径
+                "D:/tools/cmake-3.17.3-win64-x64/bin/cmake.EXE",//cmake程序路径
                 "----no-warn-unused-cli",
                 "-DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE",
                 "-DCMAKE_BUILD_TYPE:STRING=Debug",//生成debug程序，包含调试信息
-                "-DCMAKE_C_COMPILER:FILEPATH=D:/software/qt5/Tools/mingw730_64/bin/gcc.exe",//gcc路径
-                "-DCMAKE_CXX_COMPILER:FILEPATH=D:/software/qt5/Tools/mingw730_64/bin/g++.exe",//g++路径
+                "-DCMAKE_C_COMPILER:FILEPATH=D:/tools/Qt/Qt5.12.9/Tools/mingw730_64/bin/gcc.exe",//gcc路径
+                "-DCMAKE_CXX_COMPILER:FILEPATH=D:/tools/Qt/Qt5.12.9/Tools/mingw730_64/bin/g++.exe",//g++路径
                 "-H${workspaceFolder}",//工程路径
                 "-B${workspaceFolder}/build",//输出产物路径
                 "-G",
@@ -65,12 +65,12 @@
             "command": "cmd",
             "args": [
                 "/c",
-                "D:/software/cmake-3.17.3-win64-x64/bin/cmake.EXE",//cmake程序路径
+                "D:/tools/cmake-3.17.3-win64-x64/bin/cmake.EXE",//cmake程序路径
                 "----no-warn-unused-cli",
                 "-DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE",
                 "-DCMAKE_BUILD_TYPE:STRING=Release",//生成debug程序，包含调试信息
-                "-DCMAKE_C_COMPILER:FILEPATH=D:/software/qt5/Tools/mingw730_64/bin/gcc.exe",//gcc路径
-                "-DCMAKE_CXX_COMPILER:FILEPATH=D:/software/qt5/Tools/mingw730_64/bin/g++.exe",//g++路径
+                "-DCMAKE_C_COMPILER:FILEPATH=D:/tools/Qt/Qt5.12.9/Tools/mingw730_64/bin/gcc.exe",//gcc路径
+                "-DCMAKE_CXX_COMPILER:FILEPATH=D:/tools/Qt/Qt5.12.9/Tools/mingw730_64/bin/g++.exe",//g++路径
                 "-H${workspaceFolder}",//工程路径
                 "-B${workspaceFolder}/build",//输出产物路径
                 "-G",
@@ -78,9 +78,9 @@
             ]
         },
         {   //把exe依赖的qt5的dll库拷贝到exe所在目录，但是现在默认会拷贝环境变量下的dll，
-            //而不是指定的D:/software/qt5/5.12.9/mingw73_64/bin下的路径
-            //原因是环境变量没有设置为D:/software/qt5/5.12.9/mingw73_64/bin，而是设置为了
-            //D:/software/qt5/5.12.9/MSVC2017/bin,修改环境变量为mingw73的路径后重启电脑即可
+            //而不是指定的D:/tools/Qt/Qt5.12.9/5.12.9/mingw73_64/bin下的路径
+            //原因是环境变量没有设置为D:/tools/Qt/Qt5.12.9/5.12.9/mingw73_64/bin，而是设置为了
+            //D:/tools/Qt/Qt5.12.9/5.12.9/MSVC2017/bin,修改环境变量为mingw73的路径后重启电脑即可
             //默认是复制debug的dll,增加--release则表示复制release的dll,文件会比较小
             "type": "shell",
             "label": "windeployqt",
@@ -91,8 +91,8 @@
             "command": "cmd",
             "args": [
                 "/c",
-                "D:/software/qt5/5.12.9/mingw73_64/bin/windeployqt.exe",
-                "${workspaceFolder}/build/doit.exe"
+                "D:/tools/Qt/Qt5.12.9/5.12.9/mingw73_64/bin/windeployqt.exe",
+                "${workspaceFolder}/build/${workspaceRootFolderName}.exe"
             ]
         },
         {   
@@ -105,9 +105,9 @@
             "command": "cmd",
             "args": [
                 "/c",
-                "D:/software/qt5/5.12.9/mingw73_64/bin/windeployqt.exe",
+                "D:/tools/Qt/Qt5.12.9/5.12.9/mingw73_64/bin/windeployqt.exe",
                 "--release",  // release版本的dll会精简，文件会小非常多，所以软件发布的时候要选择release发布打包
-                "${workspaceFolder}/build/doit.exe"
+                "${workspaceFolder}/build/${workspaceRootFolderName}.exe"
             ]
         },
         {   //依次执行dependsOn中列出来的任务

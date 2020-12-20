@@ -1,7 +1,7 @@
 #ifndef MYCHART_H
 #define MYCHART_H
 
-#include <QWidget>
+#include <QtWidgets>
 #include <QtCharts/QChartView>
 
 class MyChartWidget : public QWidget
