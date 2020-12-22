@@ -7,9 +7,12 @@
 
 ## 最近更新
 
+    V1.1.5 
+        1、QTableView配合StandardItemModel的使用。
+
     V1.1.4 
-        1、信号和槽的使用
-        2、QSpacerItem（弹簧控件的使用）
+        1、信号和槽的使用，QComboBox下拉框的使用
+        2、QSpacerItem（弹簧控件）的使用
 
     V1.1.3 
         1、QtCharts(图表)使用，绘制折线图

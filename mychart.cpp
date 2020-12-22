@@ -26,6 +26,7 @@
 #include <QtMath>
 #include <QComboBox> 
 #include <QLabel> 
+#include <QString>
 
 MyChartWidget::MyChartWidget(QWidget *parent)
     : QWidget(parent)
@@ -42,12 +43,15 @@ MyChartWidget::~MyChartWidget()
 
 void MyChartWidget::initChartUi()
 {
+    // 头文件中已定义的变量或对象，需要在控件初始化时初始化
+    defaultSeriesFtBugs = new QLineSeries(this);
+    defaultSeriesFtFind = new QLineSeries(this);
+    showDefault = true;
+
     QHBoxLayout *mainLayout = new QHBoxLayout(this); //使用QHBoxLayout布局
 
-    // 左侧使用垂直布局,放置控制曲线显示的控件
-    QVBoxLayout *leftLayout = new QVBoxLayout(this);
 
-    QHBoxLayout *themeCtrlLayout = new QHBoxLayout(this);
+    QHBoxLayout *themeCtrlLayout = new QHBoxLayout(this);//横向布局，放在主题选择相关控件
     QLabel *lblTheme = new QLabel(this);
     lblTheme->setText(tr("图表主题:"));
     lblTheme->setFixedSize(55, 20);//固定大小，宽40，高20
@@ -63,6 +67,7 @@ void MyChartWidget::initChartUi()
     themeCbox->addItem(tr("Qt"), QChart::ChartThemeQt);
     
     themeCbox->setFixedSize(80, 20);
+    connect(themeCbox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &MyChartWidget::updateChartUi);
 
     themeCtrlLayout->addWidget(lblTheme);
     themeCtrlLayout->addWidget(themeCbox);
@@ -77,78 +82,72 @@ void MyChartWidget::initChartUi()
     */
     QSpacerItem * spacerItem = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
     themeCtrlLayout->addSpacerItem(spacerItem);
-    
 
+    QHBoxLayout *linesCtrlLayout = new QHBoxLayout(this);//横向布局，放在主题选择相关控件
     btnShowChart = new QPushButton(this);
-    btnShowChart->setText(tr("显示曲线"));
-    
-
-    QTextEdit * textEdit1 = new QTextEdit(this);
-    textEdit1->setText(tr("test1"));
-    
-    connect(themeCbox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &MyChartWidget::updateChartUi);
+    btnShowChart->setText(tr("显示默认"));
+    btnShowChart->setToolTip(tr("显示默认曲线"));
+    btnShowChart->setFixedWidth(60);
     connect(btnShowChart, &QPushButton::clicked, [=]() {
-        textEdit1->setText(tr("btnShowChart clicked"));
+        showMyDefaultSeries();
     });
-    // QTextEdit * textEdit2 = new QTextEdit(this);
-    // textEdit2->setText(tr("test2"));
-    
-    // QTextEdit * textEdit3 = new QTextEdit(this);
-    // textEdit3->setText(tr("test3"));
 
+    addChartLinesBtn = new QPushButton(this);
+    addChartLinesBtn->setText(tr("增加曲线"));
+    addChartLinesBtn->setFixedWidth(60);
+
+    linesCtrlLayout->addWidget(btnShowChart);
+    linesCtrlLayout->addWidget(addChartLinesBtn);
+    linesCtrlLayout->addSpacerItem(new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum));
+
+    // 左侧使用垂直布局,放置控制曲线显示的控件
+    QVBoxLayout *leftLayout = new QVBoxLayout(this);
     QWidget *widget = new QWidget(this);
     widget->setLayout(leftLayout);
     leftLayout->addLayout(themeCtrlLayout);
-    leftLayout->addWidget(btnShowChart);
-    leftLayout->addWidget(textEdit1);
-    // leftLayout->addWidget(textEdit2);
-    // leftLayout->addWidget(textEdit3);
-
-
-    QVBoxLayout *rightLayout = new QVBoxLayout(this); // 左侧使用垂直布局
+    leftLayout->addLayout(linesCtrlLayout);
+    QTableView * tableView = new QTableView(this);
+    // leftLayout->addWidget(btnShowChart);
+    myModel = new QStandardItemModel(14, 4, this);
+    tableView->setModel(myModel);
+    myModel->setHeaderData(0, Qt::Horizontal, "K");
+    myModel->setHeaderData(1, Qt::Horizontal, "Tm");
+    myModel->setHeaderData(2, Qt::Horizontal, "t");
+    myModel->setHeaderData(3, Qt::Horizontal, "状态");
+    myModel->setItem(0, 0, new QStandardItem("1000"));
+    myModel->setItem(0, 1, new QStandardItem("100"));
+    myModel->setItem(0, 2, new QStandardItem("5"));
+    myModel->setItem(0, 3, new QStandardItem("已隐藏"));
+    /* 设置列宽在可视界面自适应宽度 */
+    tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    /* 行颜色交替显示 */
+    tableView->setAlternatingRowColors(true);
+    /* 不允许在图形界面修改内容 */
+    tableView->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    leftLayout->addWidget(tableView);
+    
 
     QSplitter *splitterMain;
-    QSplitter *splitterRight;
-    splitterMain = new QSplitter(Qt::Horizontal,this);  //Horizontal:水平的
+    splitterMain = new QSplitter(Qt::Horizontal, this);  //Horizontal:水平的
     mainLayout->addWidget(splitterMain);
     
     splitterMain->addWidget(widget);
 
     lineChartView = new QChartView(this);
-    QLineSeries *seriesFtBugs = new QLineSeries();
-    QLineSeries *seriesFtFind = new QLineSeries();
-    // k*(1 - (np.e ** (0 - ((1/(2*(tm**2)))*(t**2)))))    k=1000;tm=5
-    // k*( ((1/tm)**2) * t * (np.e ** (0 - ((1/(2*(tm**2)))*(t**2)) )) )
-    int timeT = 100;
-    int kValue = 1000;
-    int tmValue = 5;
+    QLineSeries *seriesFtBugs = new QLineSeries(this);
+    QLineSeries *seriesFtFind = new QLineSeries(this);
 
-    for(int i=0; i<timeT + 1; i++) {
-        qreal fValue = kValue*(1 -   (qExp(0 - ((1/(2* qPow((float)tmValue, 2))) * qPow((float)i, 2)))));
-        seriesFtBugs->append(i, fValue);
-
-        qreal ftFind = kValue*(qPow(1/(float)tmValue, 2) * i * ((float)qExp(0 - ((1/ (2* qPow(tmValue, 2))) * qPow(i, 2)) )));
-        seriesFtFind->append((int)i, float(ftFind));
-    }
     /* 其他属性的设置 */
-    // chart->createDefaultAxes();
-    // chart->axes(Qt::Horizontal).first()->setRange(0, m_valueMax);
-    // chart->axes(Qt::Vertical).first()->setRange(0, m_valueCount);
     lineChartView->chart()->addSeries(seriesFtBugs);
     seriesFtBugs->setName(tr("F(t) data"));                     // x曲线数据的名称
+    seriesFtBugs->hide();  // 隐藏该series
 
     lineChartView->chart()->addSeries(seriesFtFind);
     seriesFtFind->setName(tr("f(t) data"));                     // 第二条曲线数据的名称
+    seriesFtFind->hide();  // 隐藏该series
 
-    // 设置x轴和y轴值的范围
-    // lineChartView->chart()->setAxisX(axisx, seriesFtBugs);     //已过时
-    // lineChartView->chart()->setAxisY(axisFtFind,seriesFtBugs); //已过时
-    lineChartView->chart()->createDefaultAxes();
-    lineChartView->chart()->axes(Qt::Horizontal).first()->setRange(0, 100);
-    lineChartView->chart()->axes(Qt::Vertical).first()->setRange(0, 1000);
-
-    // lineChartView->chart()->setTheme(QChart::ChartThemeDark); // 设置主题
-    lineChartView->chart()->setTitle(tr("图表标题"));          // 图表标题
+    lineChartView->chart()->setTheme(QChart::ChartThemeLight);  // 设置主题
+    lineChartView->chart()->setTitle(tr("图表标题"));            // 图表标题
     QValueAxis *axisx = new QValueAxis;
     axisx->setTitleText("time(Day)");                       // x轴刻度标题
     axisx->setLabelFormat("%d");                            // 设置刻度的格式，也就是刻度值为整数
@@ -160,13 +159,8 @@ void MyChartWidget::initChartUi()
     lineChartView->chart()->legend()->setAlignment(Qt::AlignBottom);
     lineChartView->chart()->setAnimationOptions(QChart::AllAnimations);//动画
 
-    // mainLayout->addLayout(leftLayout, 0);
-    // mainLayout->addWidget(lineChartView); //
-    // rightLayout->addWidget(lineChartView);
     splitterMain->addWidget(lineChartView);
     splitterMain->setStretchFactor(1, 4);
-
-    
 }
 
 void MyChartWidget::updateChartUi()
@@ -210,4 +204,135 @@ void MyChartWidget::updateChartUi()
         // }
         // window()->setPalette(pal);
     }
+}
+
+
+
+void MyChartWidget::addMySeries()
+{
+    QLineSeries *seriesFtBugs = new QLineSeries(this);
+    QLineSeries *seriesFtFind = new QLineSeries(this);
+    // k*(1 - (np.e ** (0 - ((1/(2*(tm**2)))*(t**2)))))    k=1000;tm=5
+    // k*( ((1/tm)**2) * t * (np.e ** (0 - ((1/(2*(tm**2)))*(t**2)) )) )
+    int timeT = 100;
+    int kValue = 1000;
+    int tmValue = 5;
+
+    for(int i=0; i<timeT + 1; i++) {
+        qreal fValue = kValue*(1 -   (qExp(0 - ((1/(2* qPow((float)tmValue, 2))) * qPow((float)i, 2)))));
+        seriesFtBugs->append(i, fValue);
+
+        qreal ftFind = kValue*(qPow(1/(float)tmValue, 2) * i * ((float)qExp(0 - ((1/ (2* qPow(tmValue, 2))) * qPow(i, 2)) )));
+        seriesFtFind->append((int)i, float(ftFind));
+    }
+    
+    /* 其他属性的设置 */
+    lineChartView->chart()->addSeries(seriesFtBugs);
+    seriesFtBugs->setName(tr("F1(t) data"));                     // x曲线数据的名称
+
+    lineChartView->chart()->addSeries(seriesFtFind);
+    seriesFtFind->setName(tr("f1(t) data"));                     // 第二条曲线数据的名称
+
+    lineChartView->chart()->createDefaultAxes();
+    lineChartView->chart()->axes(Qt::Horizontal).first()->setRange(0, 100);
+    lineChartView->chart()->axes(Qt::Vertical).first()->setRange(0, 1000);
+}
+
+
+void MyChartWidget::showMyDefaultSeries()
+{
+    if (showDefault)
+    {
+        showDefault = false;
+        bool isContains = lineChartView->chart()->series().contains(defaultSeriesFtBugs);
+        if(isContains == true) {
+            defaultSeriesFtBugs->show();
+            defaultSeriesFtFind->show();
+        } else {
+            int timeT = 100;
+            int kValue = 1000;
+            int tmValue = 5;
+
+            for(int i=0; i<timeT + 1; i++) {
+                qreal fValue = kValue*(1 -   (qExp(0 - ((1/(2* qPow((float)tmValue, 2))) * qPow((float)i, 2)))));
+                defaultSeriesFtBugs->append(i, fValue);
+
+                qreal ftFind = kValue*(qPow(1/(float)tmValue, 2) * i * ((float)qExp(0 - ((1/ (2* qPow(tmValue, 2))) * qPow(i, 2)) )));
+                defaultSeriesFtFind->append((int)i, float(ftFind));
+            }
+            lineChartView->chart()->addSeries(defaultSeriesFtBugs);
+            defaultSeriesFtBugs->setName(tr("F_0(t) data"));                     // x曲线数据的名称
+            lineChartView->chart()->addSeries(defaultSeriesFtFind);
+            defaultSeriesFtFind->setName(tr("f_0(t) data"));                     // 第二条曲线数据的名称
+            lineChartView->chart()->createDefaultAxes();
+            lineChartView->chart()->axes(Qt::Horizontal).first()->setRange(0, 100);
+            lineChartView->chart()->axes(Qt::Vertical).first()->setRange(0, 1000);
+            defaultSeriesFtBugs->show();
+            defaultSeriesFtFind->show();
+        }
+        btnShowChart->setText(tr("隐藏默认"));
+        myModel->setItem(0, 3, new QStandardItem("已显示"));
+    } else
+    {
+        showDefault = true;
+        bool isContains = lineChartView->chart()->series().contains(defaultSeriesFtBugs);
+        if(isContains == true) {  // 已存在，则只操作隐藏
+            defaultSeriesFtBugs->hide();
+            defaultSeriesFtFind->hide();
+        } else {  // 不存在，则添加后隐藏
+            int timeT = 100;
+            int kValue = 1000;
+            int tmValue = 5;
+
+            for(int i=0; i<timeT + 1; i++) {
+                qreal fValue = kValue*(1 -   (qExp(0 - ((1/(2* qPow((float)tmValue, 2))) * qPow((float)i, 2)))));
+                defaultSeriesFtBugs->append(i, fValue);
+
+                qreal ftFind = kValue*(qPow(1/(float)tmValue, 2) * i * ((float)qExp(0 - ((1/ (2* qPow(tmValue, 2))) * qPow(i, 2)) )));
+                defaultSeriesFtFind->append((int)i, float(ftFind));
+            }
+            lineChartView->chart()->addSeries(defaultSeriesFtBugs);
+            defaultSeriesFtBugs->setName(tr("F_0(t) data"));                     // x曲线数据的名称
+            lineChartView->chart()->addSeries(defaultSeriesFtFind);
+            defaultSeriesFtFind->setName(tr("f_0(t) data"));                     // 第二条曲线数据的名称
+            lineChartView->chart()->createDefaultAxes();
+            lineChartView->chart()->axes(Qt::Horizontal).first()->setRange(0, 100);
+            lineChartView->chart()->axes(Qt::Vertical).first()->setRange(0, 1000);
+
+            defaultSeriesFtBugs->hide();
+            defaultSeriesFtFind->hide();
+        }
+        btnShowChart->setText(tr("显示默认"));
+        myModel->setItem(0, 3, new QStandardItem("已隐藏"));
+    }
+    
+    
+    
+
+
+
+    // // k*(1 - (np.e ** (0 - ((1/(2*(tm**2)))*(t**2)))))    k=1000;tm=5
+    // // k*( ((1/tm)**2) * t * (np.e ** (0 - ((1/(2*(tm**2)))*(t**2)) )) )
+    // int timeT = 100;
+    // int kValue = 1000;
+    // int tmValue = 5;
+
+    // for(int i=0; i<timeT + 1; i++) {
+    //     qreal fValue = kValue*(1 -   (qExp(0 - ((1/(2* qPow((float)tmValue, 2))) * qPow((float)i, 2)))));
+    //     defaultSeriesFtBugs->append(i, fValue);
+
+    //     qreal ftFind = kValue*(qPow(1/(float)tmValue, 2) * i * ((float)qExp(0 - ((1/ (2* qPow(tmValue, 2))) * qPow(i, 2)) )));
+    //     defaultSeriesFtFind->append((int)i, float(ftFind));
+    // }
+    
+    // /* 其他属性的设置 */
+    // lineChartView->chart()->addSeries(defaultSeriesFtBugs);
+    // defaultSeriesFtBugs->setName(tr("F_0(t) data"));                     // x曲线数据的名称
+
+    // lineChartView->chart()->addSeries(defaultSeriesFtFind);
+    // defaultSeriesFtFind->setName(tr("f_0(t) data"));                     // 第二条曲线数据的名称
+
+    // lineChartView->chart()->createDefaultAxes();
+    // lineChartView->chart()->axes(Qt::Horizontal).first()->setRange(0, 100);
+    // lineChartView->chart()->axes(Qt::Vertical).first()->setRange(0, 1000);
 }

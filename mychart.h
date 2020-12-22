@@ -1,23 +1,10 @@
 #ifndef MYCHART_H
 #define MYCHART_H
 
-#include <QtWidgets>
+#include <QWidget>
 #include <QtCharts>
-#include <QChartView>
-#include <QtCharts/QPieSeries>
-#include <QtCharts/QPieSlice>
-#include <QtCharts/QAbstractBarSeries>
-#include <QtCharts/QPercentBarSeries>
-#include <QtCharts/QStackedBarSeries>
-#include <QtCharts/QBarSeries>
-#include <QtCharts/QBarSet>
-#include <QtCharts/QLineSeries>
-#include <QtCharts/QSplineSeries>
-#include <QtCharts/QScatterSeries>
-#include <QtCharts/QAreaSeries>
-#include <QtCharts/QLegend>
-#include <QtCharts/QBarCategoryAxis>
-#include <QtCharts/QValueAxis>
+#include <QComboBox>
+#include <QPushButton>
 
 class MyChartWidget : public QWidget
 {
@@ -32,10 +19,17 @@ public slots:
 
 private:
     void initChartUi();
+    void addMySeries();
+    void showMyDefaultSeries();
 
     QComboBox *themeCbox;           // 主题选择框
     QPushButton * btnShowChart;     // 显示曲线按钮
+    QPushButton * addChartLinesBtn;     // 增加曲线按钮
     QChartView *lineChartView;
+    QStandardItemModel *myModel;
+    QLineSeries *defaultSeriesFtBugs;
+    QLineSeries *defaultSeriesFtFind;
+    bool showDefault;
 };
 
 #endif // MYCHART_H
