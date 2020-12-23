@@ -4,9 +4,9 @@
 
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv); //定义并创建应用程序
-    Q_INIT_RESOURCE(resources); //Qt的资源机制
-    MainWindow w;               //定义并创建窗口
-    w.show();                   //显示窗口
-    return a.exec();            //应用程序运行
+    QApplication a(argc, argv); // 定义并创建应用程序
+    Q_INIT_RESOURCE(resources); // Qt的资源机制
+    MainWindow w;               // 定义并创建窗口
+    w.show();                   // 显示窗口
+    return a.exec();            // 应用程序运行
 }

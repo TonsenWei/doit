@@ -47,6 +47,8 @@ if(ANDROID)
     myserialwidget.h
     mychart.h
     mychart.cpp
+    mydialog.h
+    mydialog.cpp
   )
 else()
   add_executable(doit WIN32
@@ -58,6 +60,8 @@ else()
     myserialwidget.h
     mychart.h
     mychart.cpp
+    mydialog.h
+    mydialog.cpp
   )
 endif()
 

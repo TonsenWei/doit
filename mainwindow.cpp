@@ -99,11 +99,11 @@ void MainWindow::createQTabWidget()
     MyChartWidget *myChartWidget = new MyChartWidget(this);
 
 
-    MySerialWidget *myserialwidget = new MySerialWidget(this);
-    QLabel *fileNameLabel = new QLabel(tr("File Name:"));
+    // MySerialWidget *myserialwidget = new MySerialWidget(this);
+    // QLabel *fileNameLabel = new QLabel(tr("File Name:"));
     tabWidget->addTab(myChartWidget, tr("chart"));
-    tabWidget->addTab(myserialwidget, tr("General"));
-    tabWidget->addTab(fileNameLabel, tr("test1"));
+    // tabWidget->addTab(myserialwidget, tr("General"));
+    // tabWidget->addTab(fileNameLabel, tr("test1"));
     // tabWidget->addTab(new PermissionsTab(fileInfo), tr("Permissions"));
     // tabWidget->addTab(new ApplicationsTab(fileInfo), tr("Applications"));
     setCentralWidget(tabWidget); 
