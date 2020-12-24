@@ -95,14 +95,11 @@ void MainWindow::createQTabWidget()
 {
     QTabWidget *tabWidget = new QTabWidget(this);
 
-
     MyChartWidget *myChartWidget = new MyChartWidget(this);
-
-
-    // MySerialWidget *myserialwidget = new MySerialWidget(this);
+    MySerialWidget *myserialwidget = new MySerialWidget(this);
     // QLabel *fileNameLabel = new QLabel(tr("File Name:"));
-    tabWidget->addTab(myChartWidget, tr("chart"));
-    // tabWidget->addTab(myserialwidget, tr("General"));
+    tabWidget->addTab(myChartWidget, tr("折线图"));
+    tabWidget->addTab(myserialwidget, tr("串口"));
     // tabWidget->addTab(fileNameLabel, tr("test1"));
     // tabWidget->addTab(new PermissionsTab(fileInfo), tr("Permissions"));
     // tabWidget->addTab(new ApplicationsTab(fileInfo), tr("Applications"));
@@ -110,6 +107,7 @@ void MainWindow::createQTabWidget()
     
     tabWidget->setTabIcon(0, newIcon);//要先addTab之后才能setIcon
     tabWidget->setTabsClosable(true); // 设置为可关闭
+    tabWidget->setCurrentIndex(1);
     // QVBoxLayout *mainLayout = new QVBoxLayout;
     // mainLayout->addWidget(tabWidget);
     // this->setLayout(mainLayout);

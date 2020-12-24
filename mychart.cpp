@@ -59,7 +59,7 @@ void MyChartWidget::initChartUi()
     mainLayout->setSpacing(0);
 
 
-    QHBoxLayout *themeCtrlLayout = new QHBoxLayout(this);//横向布局，放在主题选择相关控件
+    QHBoxLayout *themeCtrlLayout = new QHBoxLayout(this);//横向布局，放主题选择相关控件
     themeCtrlLayout->setSpacing(0);
     // themeCtrlLayout->setMargin(5);//四周的，下面单独设置上下左右的
     themeCtrlLayout->setContentsMargins(0, 5, 0, 5);  // 上边距5，下边距5，左右为0
@@ -166,8 +166,6 @@ void MyChartWidget::initChartUi()
     leftLayout->setContentsMargins(0,0,0,0);//与外部控件的距离
     QWidget *widget = new QWidget(this);
     widget->setLayout(leftLayout);
-    leftLayout->addLayout(themeCtrlLayout);
-    leftLayout->addLayout(linesCtrlLayout);
     QTableView * tableView = new QTableView(this);
     // leftLayout->addWidget(btnShowChart);
     myModel = new QStandardItemModel(30, 4, this);
@@ -186,6 +184,9 @@ void MyChartWidget::initChartUi()
     tableView->setAlternatingRowColors(true);
     /* 不允许在图形界面修改内容 */
     tableView->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    // 左侧添加
+    leftLayout->addLayout(themeCtrlLayout);
+    leftLayout->addLayout(linesCtrlLayout);
     leftLayout->addWidget(tableView);
 
     

@@ -7,6 +7,13 @@
 
 ## 最近更新
 
+    V1.1.7 
+        1、QSerialPort(串口)组件的使用，串口数据接收功能测试。
+        2、QTextEdit（文本框）使用，设置文字对齐，横向滚动条。
+        3、QComboBox默认不可编辑，通过setEditable(true)设置为可编辑当前文字。
+        4、QStringList使用。
+        5、QGridLayout布局使用。
+
     V1.1.6 
         1、自定义对话框使用。
         2、QChart折线图清除和添加曲线操作，曲线的显示和隐藏。

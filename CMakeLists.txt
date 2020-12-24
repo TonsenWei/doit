@@ -34,7 +34,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 #    endif()
 #endif()
 
-find_package(Qt5 COMPONENTS Widgets Core Gui Charts REQUIRED)
+find_package(Qt5 COMPONENTS Widgets Core Gui Charts SerialPort REQUIRED)
 
 
 if(ANDROID)
@@ -65,4 +65,4 @@ else()
   )
 endif()
 
-target_link_libraries(doit PRIVATE Qt5::Widgets Qt5::Core Qt5::Gui Qt5::Charts)
+target_link_libraries(doit PRIVATE Qt5::Widgets Qt5::Core Qt5::Gui Qt5::Charts Qt5::SerialPort)
