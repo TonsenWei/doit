@@ -49,6 +49,8 @@ if(ANDROID)
     mychart.cpp
     mydialog.h
     mydialog.cpp
+    adbwidget.h
+    adbwidget.cpp
   )
 else()
   add_executable(doit WIN32
@@ -62,6 +64,8 @@ else()
     mychart.cpp
     mydialog.h
     mydialog.cpp
+    adbwidget.h
+    adbwidget.cpp
   )
 endif()
 

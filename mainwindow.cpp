@@ -18,6 +18,7 @@
 
 #include "myserialwidget.h"
 #include "mychart.h"
+#include "adbwidget.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -29,8 +30,9 @@ MainWindow::MainWindow(QWidget *parent)
     createToolBar();
     createStatusBar();  // 初始化状态栏
     // createMainContents();   // 初始化主窗口内容
-    // createQDockWidgets();   // QDock窗口
+    
     createQTabWidget();
+    // createQDockWidgets();   // QDock窗口
 }
 
 /**
@@ -97,17 +99,19 @@ void MainWindow::createQTabWidget()
 
     MyChartWidget *myChartWidget = new MyChartWidget(this);
     MySerialWidget *myserialwidget = new MySerialWidget(this);
+    AdbWidget *adbWidget = new AdbWidget(this);
     // QLabel *fileNameLabel = new QLabel(tr("File Name:"));
     tabWidget->addTab(myChartWidget, tr("折线图"));
     tabWidget->addTab(myserialwidget, tr("串口"));
+    tabWidget->addTab(adbWidget, tr("ADB"));
     // tabWidget->addTab(fileNameLabel, tr("test1"));
     // tabWidget->addTab(new PermissionsTab(fileInfo), tr("Permissions"));
     // tabWidget->addTab(new ApplicationsTab(fileInfo), tr("Applications"));
-    setCentralWidget(tabWidget); 
+    setCentralWidget(tabWidget);
     
-    tabWidget->setTabIcon(0, newIcon);//要先addTab之后才能setIcon
+    tabWidget->setTabIcon(0, newIcon);// 要先addTab之后才能setIcon
     tabWidget->setTabsClosable(true); // 设置为可关闭
-    tabWidget->setCurrentIndex(1);
+    tabWidget->setCurrentIndex(2);
     // QVBoxLayout *mainLayout = new QVBoxLayout;
     // mainLayout->addWidget(tabWidget);
     // this->setLayout(mainLayout);
